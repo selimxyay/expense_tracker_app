@@ -6,6 +6,7 @@ import 'expenses_container.dart';
 class ExpensesList extends StatelessWidget {
   const ExpensesList({super.key, required this.expenses});
 
+  // Using the List again because ListView.builder needs it
   final List<ExpenseModel> expenses;
 
   @override

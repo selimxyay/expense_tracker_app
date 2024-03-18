@@ -9,8 +9,31 @@ class ExpensesContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Text(expense.title),
+    return Card( 
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: Column(
+          children: [
+            Text(expense.title),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                // type of amount is double
+                  // toStringAsFixed specifies a fixed number of decimal 
+                Text('\$${expense.amount.toStringAsFixed(2)}'), // e.g., 12.21
+                const Spacer(),
+                Row(
+                  children: [
+                    const Icon(Icons.alarm),
+                    const SizedBox(width: 8),
+                    Text(expense.date.toString())
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
