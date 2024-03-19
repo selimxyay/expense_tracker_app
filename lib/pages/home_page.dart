@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../components/add_expense.dart';
 import '../components/expenses_list.dart';
 import '../model/expense_model.dart';
 
@@ -11,8 +12,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // list of expense model must be created 
-    // because multiple expense model object instances will be created
+  // list of expense model must be created
+  // because multiple expense model object instances will be created
   List<ExpenseModel> registeredExpenses = [
     ExpenseModel(
       title: "Flutter Course",
@@ -27,13 +28,22 @@ class _HomePageState extends State<HomePage> {
       category: Category.leisure,
     ),
   ];
+
+  void addExpense() {
+    showModalBottomSheet(context: context, builder: (ctx) => const AddExpense());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Flutter ExpenseTracker"),
+        actions: [IconButton(onPressed: addExpense, icon: const Icon(Icons.add))],
+      ),
       body: Column(
         children: [
           const Text("The Chart"),
-          Expanded( 
+          Expanded(
             child: ExpensesList(
               expenses: registeredExpenses,
             ),
