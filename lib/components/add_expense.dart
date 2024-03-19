@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 
+import '../model/expense_model.dart';
+
 class AddExpense extends StatefulWidget {
   const AddExpense({super.key});
 
@@ -12,6 +14,7 @@ class AddExpense extends StatefulWidget {
 class _AddExpenseState extends State<AddExpense> {
   final _expenseTitleController = TextEditingController();
   final _expenseAmountController = TextEditingController();
+  DateTime? _selectedDate;
 
   // ignore: annotate_overrides
   void dispose() {
@@ -20,11 +23,16 @@ class _AddExpenseState extends State<AddExpense> {
     super.dispose();
   }
 
-  void _datePicker() {
+  void _datePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month, now.day);
 
-    showDatePicker(context: context, firstDate: firstDate, lastDate: now);
+    final pickedDate = await showDatePicker(
+        context: context, firstDate: firstDate, lastDate: now);
+
+    setState(() {
+      _selectedDate = pickedDate;
+    });
   }
 
   @override
@@ -57,8 +65,12 @@ class _AddExpenseState extends State<AddExpense> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    const Text("Selected Date"),
-                    IconButton(onPressed: _datePicker, icon: const Icon(Icons.calendar_month))
+                    Text(_selectedDate == null
+                        ? "No date selected"
+                        : formatter.format(_selectedDate!)),
+                    IconButton(
+                        onPressed: _datePicker,
+                        icon: const Icon(Icons.calendar_month)),
                   ],
                 ),
               ),
@@ -68,6 +80,15 @@ class _AddExpenseState extends State<AddExpense> {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              DropdownButton(
+                  items: Category.values
+                      .map((category) => DropdownMenuItem(
+                          value: category,
+                          child: Text(category.name.toString())))
+                      .toList(),
+                  onChanged: (value) {
+                    print(value);
+                  }),
               TextButton(
                   onPressed: () {
                     Navigator.pop(context);
