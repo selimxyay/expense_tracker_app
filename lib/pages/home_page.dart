@@ -28,9 +28,11 @@ class _HomePageState extends State<HomePage> {
       category: Category.leisure,
     ),
   ];
-
+ 
+  // Plus(+) icon at the right of appBar
   void addExpense() {
-    showModalBottomSheet(context: context, builder: (ctx) => const AddExpense());
+    showModalBottomSheet(
+        context: context, builder: (ctx) => const AddExpense());
   }
 
   @override
@@ -38,7 +40,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Flutter ExpenseTracker"),
-        actions: [IconButton(onPressed: addExpense, icon: const Icon(Icons.add))],
+        actions: [
+          IconButton(onPressed: addExpense, icon: const Icon(Icons.add))
+        ],
       ),
       body: Column(
         children: [
