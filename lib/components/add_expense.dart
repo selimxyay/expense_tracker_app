@@ -23,7 +23,7 @@ class _AddExpenseState extends State<AddExpense> {
   DateTime? _selectedDate;
 
   // variable for category
-  Category _selectedCategory = Category.leisure;
+  Category _selectedCategory = Category.leisure; 
 
   
   @override
@@ -86,7 +86,7 @@ class _AddExpenseState extends State<AddExpense> {
           }, child: const Text("Okay")),
         ],
       ));
-      
+
       // after showDialog, return keyword is used in order to not to return invalid data
       return;
     }

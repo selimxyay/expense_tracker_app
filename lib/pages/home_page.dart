@@ -31,8 +31,7 @@ class _HomePageState extends State<HomePage> {
  
   // Plus(+) icon at the right of appBar
   void addExpense() {
-    showModalBottomSheet(
-        context: context, builder: (ctx) => const AddExpense());
+    showModalBottomSheet(context: context, builder: (ctx) => const AddExpense());
   }
 
   @override
