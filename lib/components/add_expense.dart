@@ -22,6 +22,9 @@ class _AddExpenseState extends State<AddExpense> {
   // variable for displaying the date after user has selected
   DateTime? _selectedDate;
 
+  // variable for category
+  Category _selectedCategory = Category.leisure;
+
   
   @override
   void dispose() {
@@ -55,6 +58,37 @@ class _AddExpenseState extends State<AddExpense> {
     setState(() {
       _selectedDate = dateThatUserSelected;
     });
+  }
+
+  // When user clicked on the "Save" button, this method will be executed
+    // Basically this method is checking if expense title, amount and date is selected or not
+      // If it's not selected, it'll throw an error
+
+  void _submitTheNewExpense() {
+    // tryParse is used on strings 
+      // it tries to convert those strings into double or integers
+        // if it can not convert, it returns null
+    final enteredAmount = double.tryParse(_expenseAmountController.text);
+    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
+
+    // In here, trim prevents empty submissions due to accidental whitespaces
+    // This if statement check via bool values 
+    if (_expenseTitleController.text.trim().isEmpty || amountIsInvalid || _selectedDate == null) {
+      /* 
+      showDialog in Flutter displays a modal dialog on top of your app's content, pausing user interaction with the rest of the app until the dialog is dismissed.
+      */
+      showDialog(context: context, builder: (ctx) => AlertDialog(
+        title: const Text("Invalid Input!"),
+        content: const Text("Please make sure a valid title, amount, date and category was entered!"),
+        actions: [
+          TextButton(onPressed: () {
+            Navigator.pop(ctx);
+          }, child: const Text("Okay")),
+        ],
+      ));
+      // after showDialog, return keyword is used in order to not to return invalid data
+      return;
+    }
   }
 
   @override
@@ -115,13 +149,16 @@ class _AddExpenseState extends State<AddExpense> {
               ),
             ],
           ),
-          const SizedBox(height: 25),
+          const SizedBox(height: 40),
 
           // Category & Buttons
 
           Row(
             children: [
               DropdownButton(
+                // value is the currently selected item
+                value: _selectedCategory,
+
                 // In order to display each category
                   // map() is used to create a DropdownMenuItem for each category
 
@@ -130,11 +167,21 @@ class _AddExpenseState extends State<AddExpense> {
                           value: category,
                           // items parameter requires a List
                             // this is why .toList() is used
-                          child: Text(category.name))).toList(),
+                          child: Text(category.name.toUpperCase()))).toList(),
 
-                  // a method will be executed when user selected an item
+                  // a method that will execute whenever new item is selected
+                    // In onChanged, value is the newly selected category in this context
+
                   onChanged: (value) {
-                    print(value);
+                    // if user did not select anything, stop executing the rest of this method
+                    if (value == null) {
+                      return;
+                    }
+
+                    // when user select a category, assign it to _selectedCategory variable
+                    setState(() {
+                      _selectedCategory = value;
+                    });
                   }),
 
               const Spacer(), // buttons will move to the far right
@@ -148,10 +195,7 @@ class _AddExpenseState extends State<AddExpense> {
                   },
                   child: const Text("Cancel")),
               ElevatedButton(
-                  onPressed: () {
-                    print(_expenseTitleController.text);
-                    print(_expenseAmountController.text);
-                  },
+                  onPressed: _submitTheNewExpense,
                   child: const Text("Save")),
             ],
           ),
