@@ -50,7 +50,7 @@ class _AddExpenseState extends State<AddExpense> {
       );
 
     // If this method was not an async method,
-      // code would try to access to _selectedDate before user selected any date
+      // code would try to access _selectedDate before user selected any date
         // because of that, async operation must be used
     setState(() {
       _selectedDate = dateThatUserSelected;

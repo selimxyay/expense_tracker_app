@@ -12,8 +12,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // list of expense model must be created
-  // because multiple expense model object instances will be created
+  // with List<ExpenseModel>, we're telling that 
+    // This list can only hold ExpenseModel objects.
   List<ExpenseModel> registeredExpenses = [
     ExpenseModel(
       title: "Flutter Course",

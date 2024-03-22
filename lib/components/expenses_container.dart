@@ -9,29 +9,43 @@ class ExpensesContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card( 
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: Column(
-          children: [
-            Text(expense.title),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                // type of amount is double
-                  // toStringAsFixed specifies a fixed number of decimal 
-                Text('\$${expense.amount.toStringAsFixed(2)}'), // e.g., 12.21
-                const Spacer(),
-                Row(
-                  children: [
-                    Icon(categoryIcons[expense.category]),
-                    const SizedBox(width: 8),
-                    Text(expense.formattedDate),
-                  ],
-                ),
-              ],
-            ),
-          ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+      child: Card( 
+        child: Padding(
+          padding: const EdgeInsets.all(25),
+          child: Column(
+            children: [
+              
+              // Expense title
+
+              Text(expense.title),
+
+              const SizedBox(height: 8),
+
+              // Expense amount, Category and Date
+
+              Row(
+                children: [
+                  // type of amount is double
+                    // toStringAsFixed specifies a fixed number of decimal 
+                  Text('\$${expense.amount.toStringAsFixed(2)}'), // e.g., 12.21
+                  const Spacer(),
+                  
+                  // This is the Row inside Row
+                    // It's for displaying the category and date
+
+                  Row(
+                    children: [
+                      Icon(categoryIcons[expense.category]),
+                      const SizedBox(width: 8),
+                      Text(expense.formattedDate),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
