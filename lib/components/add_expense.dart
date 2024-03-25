@@ -6,7 +6,9 @@ import '../model/expense_model.dart';
 import 'package:intl/intl.dart';
 
 class AddExpense extends StatefulWidget {
-  const AddExpense({super.key});
+  const AddExpense({super.key, required this.onAddExpense});
+
+  final void Function(ExpenseModel expense) onAddExpense; 
 
   @override
   State<AddExpense> createState() => _AddExpenseState();
@@ -69,16 +71,19 @@ class _AddExpenseState extends State<AddExpense> {
       // it tries to convert those strings into double or integers
         // if it can not convert, it returns null
     final enteredAmount = double.tryParse(_expenseAmountController.text);
+
     final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
+    final titleIsInvalid = _expenseTitleController.text.trim().isEmpty;
+    final dateIsInvalid = _selectedDate == null;
 
     // In here, trim prevents empty submissions due to accidental whitespaces
     // This if statement check via bool values 
-    if (_expenseTitleController.text.trim().isEmpty || amountIsInvalid || _selectedDate == null) {
+    if (titleIsInvalid || amountIsInvalid || dateIsInvalid) {
       /* 
       showDialog in Flutter displays a modal dialog on top of your app's content, pausing user interaction with the rest of the app until the dialog is dismissed.
       */
       showDialog(context: context, builder: (ctx) => AlertDialog(
-        title: const Text("Invalid Input!"),
+        title: const Text("Invalid Input!", style: TextStyle(fontWeight: FontWeight.bold),),
         content: const Text("Please make sure a valid title, amount, date and category was entered!"),
         actions: [
           TextButton(onPressed: () {
@@ -86,21 +91,24 @@ class _AddExpenseState extends State<AddExpense> {
           }, child: const Text("Okay")),
         ],
       ));
-
       // after showDialog, return keyword is used in order to not to return invalid data
+      // basically we're saying "stop the execution of _submitTheNewExpense"
+      // because we don't want to submit the data which contains invalid input
       return;
-    }
+    } 
+    widget.onAddExpense(ExpenseModel(title: _expenseTitleController.text, amount: enteredAmount, date: _selectedDate!, category: _selectedCategory));
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
       child: Column(
         children: [
-
+    
           // Title
-
+    
           TextField(
             controller: _expenseTitleController,
             maxLength: 50,
@@ -108,9 +116,9 @@ class _AddExpenseState extends State<AddExpense> {
               label: Text("Title"),
             ),
           ),
-
+    
           // Amount & Date
-
+    
           Row(
             children: [
               Expanded(
@@ -121,21 +129,21 @@ class _AddExpenseState extends State<AddExpense> {
                     prefixText: '\$',
                     label: Text("Amount"),
                   ),
-                  keyboardType: TextInputType.number,
+                  // keyboardType: TextInputType.numberWithOptions(decimal: true),
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
-
+    
                 // This is the Row inside Row for 
                 // Date info(e.g., 01.01.2024) and Date icon
-
+    
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-
+    
                     // Date
-
+    
                     Text(_selectedDate == null
                         ? "No date selected"
                         : DateFormat.yMd().format(_selectedDate!)), // with !, it ensures that it's not gonna return null
@@ -151,44 +159,44 @@ class _AddExpenseState extends State<AddExpense> {
             ],
           ),
           const SizedBox(height: 40),
-
+    
           // Category & Buttons
-
+    
           Row(
             children: [
               DropdownButton(
                 // value is the currently selected item
                 value: _selectedCategory,
-
+    
                 // In order to display each category
                   // map() is used to create a DropdownMenuItem for each category
-
+    
                   items: Category.values
                       .map((category) => DropdownMenuItem(
                           value: category,
                           // items parameter requires a List
                             // this is why .toList() is used
                           child: Text(category.name.toUpperCase()))).toList(),
-
+    
                   // a method that will execute whenever new item is selected
                     // In onChanged, value is the newly selected category in this context
-
+    
                   onChanged: (value) {
                     // if user did not select anything, stop executing the rest of this method
                     if (value == null) {
                       return;
                     }
-
+    
                     // when user select a category, assign it to _selectedCategory variable
                     setState(() {
                       _selectedCategory = value;
                     });
                   }),
-
+    
               const Spacer(), // buttons will move to the far right
-
+    
               // Cancel & Save buttons
-
+    
               TextButton(
                   // when it's pressed, it closes the current screen
                   onPressed: () {

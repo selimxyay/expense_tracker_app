@@ -17,7 +17,6 @@ const categoryIcons = {
 };
 
 class ExpenseModel {
-   
   // no constructor for id, an initializer list is used instead
   // because new id must be created every time new instance of object is created
 
@@ -36,5 +35,29 @@ class ExpenseModel {
 
   String get formattedDate {
     return DateFormat.yMd().format(date);
+  }
+}
+
+// this class is for displaying the summary chart
+class ExpenseBucket {
+  const ExpenseBucket({required this.category, required this.expenses});
+
+  final Category category;
+  final List<ExpenseModel> expenses;
+
+  // this is called alternative constructor function
+  // it provides more control over initialization
+  ExpenseBucket.forCategory(List<ExpenseModel> allExpenses, this.category)
+      : expenses = allExpenses
+            .where((expense) => expense.category == category)
+            .toList();
+
+  double get totalExpenses {
+    double sum = 0;
+
+    for (final expense in expenses) {
+      sum += expense.amount;
+    }
+    return sum;
   }
 }
