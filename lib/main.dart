@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'pages/home_page.dart';
-
-/* 
-expenses.dart = home_page.dart
-expense.dart = expense_model.dart
-expensesItem.dart = expenses_container.dart
-new_expense.dart = add_expense.dart
-*/
+// import 'package:flutter/services.dart';
 
 void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations([
+    // DeviceOrientation.portraitUp,
+  // ]).then((value) => runApp(MyApp()));
   runApp(MyApp());
 }
 
@@ -26,25 +24,21 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(255, 151, 184, 211),
         colorScheme: myColorScheme,
 
-        // appBar theme
         appBarTheme: const AppBarTheme().copyWith(
           backgroundColor: myColorScheme.onPrimaryContainer,
           foregroundColor: myColorScheme.onPrimary,
         ),
 
-        // card theme
         cardTheme: const CardTheme().copyWith(
           color: myColorScheme.primaryContainer,
         ),
 
-        // elevated button theme
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: myColorScheme.primaryContainer,
           ),
         ),
 
-        // text theme
         textTheme: ThemeData().textTheme.copyWith(
                 titleLarge: TextStyle(
               fontWeight: FontWeight.normal,

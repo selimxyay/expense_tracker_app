@@ -10,7 +10,7 @@ class ExpensesContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+      padding: const EdgeInsets.all(10),
       child: Card( 
         child: Padding(
           padding: const EdgeInsets.all(25),

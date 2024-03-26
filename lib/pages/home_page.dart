@@ -40,6 +40,8 @@ class _HomePageState extends State<HomePage> {
   // Plus(+) icon at the right of appBar
   void addExpense() {
     showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
         // isScrollControlled: true, // it will take all the available height
         context: context,
         builder: (ctx) => AddExpense(
@@ -55,18 +57,28 @@ class _HomePageState extends State<HomePage> {
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Colors.grey.shade100,
-      content: const Text("Expense is deleted.", style: TextStyle(color: Colors.black),),
+      content: const Text(
+        "Expense is deleted.",
+        style: TextStyle(color: Colors.black),
+      ),
       duration: const Duration(seconds: 3),
-      action: SnackBarAction(textColor: Colors.black, label: "Undo", onPressed: () {
-        setState(() {
-          registeredExpenses.insert(indexOfExpense, expense);
-        });
-      },),
+      action: SnackBarAction(
+        textColor: Colors.black,
+        label: "Undo",
+        onPressed: () {
+          setState(() {
+            registeredExpenses.insert(indexOfExpense, expense);
+          });
+        },
+      ),
     ));
   }
 
   @override
   Widget build(BuildContext context) {
+    // Stores the width of a screen
+    final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Flutter Expense Tracker"),
@@ -74,25 +86,45 @@ class _HomePageState extends State<HomePage> {
           IconButton(onPressed: addExpense, icon: const Icon(Icons.add))
         ],
       ),
-      body: Column(
-        children: [
-          Chart(expenses: registeredExpenses),
-          Expanded(
-              child: registeredExpenses.isNotEmpty
-                  ? ExpensesList(
-                      expenses: registeredExpenses,
-                      onRemoveExpense: _removeExpense,
-                    )
-                  : const Center(
-                      child: Text(
-                        "There is no expense. Start adding some!",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                    )),
-        ],
-      ),
+      body: width < 600
+          ? Column(
+              children: [
+                Chart(expenses: registeredExpenses),
+                Expanded(
+                    child: registeredExpenses.isNotEmpty
+                        ? ExpensesList(
+                            expenses: registeredExpenses,
+                            onRemoveExpense: _removeExpense,
+                          )
+                        : const Center(
+                            child: Text(
+                              "There is no expense. Start adding some!",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                          )),
+              ],
+            )
+          : Row(
+              children: [
+                Expanded(child: Chart(expenses: registeredExpenses)),
+                Expanded(
+                    child: registeredExpenses.isNotEmpty
+                        ? ExpensesList(
+                            expenses: registeredExpenses,
+                            onRemoveExpense: _removeExpense,
+                          )
+                        : const Center(
+                            child: Text(
+                              "There is no expense. Start adding some!",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                          )),
+              ],
+            ),
     );
   }
 }
